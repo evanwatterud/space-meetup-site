@@ -43,7 +43,22 @@ end
 get '/meetups/show/:id' do
   meetup_id = params[:id]
   @meetup = Meetup.where(id: meetup_id).first
+  @attendees = @meetup.users
   erb :'meetups/show'
+end
+
+get '/meetups/join/:id' do
+  if session[:user_id] == nil
+    flash[:notice] = "You must be signed in to join a meetup"
+  else
+    attendee = Attendee.create(user_id: session[:user_id], meetup_id: params[:id])
+    if attendee.save
+      flash[:notice] = "You have joined the meetup"
+    else
+      flash[:notice] = "You already joined this meetup"
+    end
+  end
+  redirect '/'
 end
 
 get '/meetups/new' do

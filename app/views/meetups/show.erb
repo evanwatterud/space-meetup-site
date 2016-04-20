@@ -6,3 +6,13 @@
   <li>Location: <%= @meetup.location %></li>
   <li>Description: <%= @meetup.description %></li>
 </ul>
+
+<h3>Users Attending</h3>
+
+<ul>
+  <% @attendees.each do |attendee| %>
+    <li><%= attendee.username %></li>
+  <% end %>
+</ul>
+
+<input type="button" onclick="location.href='/meetups/join/<%= @meetup.id %>';" value="Join Meetup" />
