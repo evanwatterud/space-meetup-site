@@ -11,10 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140606200404) do
+ActiveRecord::Schema.define(version: 20160419015911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "attendees", force: :cascade do |t|
+    t.integer "user_id",   null: false
+    t.integer "meetup_id", null: false
+  end
+
+  create_table "meetups", force: :cascade do |t|
+    t.integer  "creator_id",  null: false
+    t.string   "name",        null: false
+    t.string   "location",    null: false
+    t.text     "description", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "meetups", ["name"], name: "index_meetups_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider",   null: false

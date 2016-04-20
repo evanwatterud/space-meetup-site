@@ -11,6 +11,10 @@ helpers do
   end
 end
 
+def clear_form
+  session[:name], session[:location], session[:description] = "", "", ""
+end
+
 get '/' do
   redirect '/meetups'
 end
@@ -31,5 +35,36 @@ get '/sign_out' do
 end
 
 get '/meetups' do
+  clear_form
+  @meetups = Meetup.all.sort { |a, b| a.name <=> b.name }
   erb :'meetups/index'
+end
+
+get '/meetups/show/:id' do
+  meetup_id = params[:id]
+  @meetup = Meetup.where(id: meetup_id).first
+  erb :'meetups/show'
+end
+
+get '/meetups/new' do
+  @form_data = { name: session[:name], location: session[:location], description: session[:description] }
+  erb :'meetups/new'
+end
+
+post '/meetups' do
+  if session[:user_id] == nil
+    flash[:notice] = "You must be signed in to do that."
+    redirect '/'
+  end
+  meetup = Meetup.new(creator_id: session[:user_id], name: params[:name], location: params[:location], description: params[:description])
+  if meetup.save
+    flash[:notice] = "Meetup created successfully"
+    clear_form
+  else
+    error = meetup.errors.full_messages.first
+    flash[:notice] = "#{error}"
+    session[:name], session[:location], session[:description] = params[:name], params[:location], params[:description]
+    redirect '/meetups/new'
+  end
+  redirect '/meetups'
 end

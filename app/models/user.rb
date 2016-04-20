@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  has_many :meetups
+  has_many :attendees
+
+  validates_uniqueness_of :uid, :provider
+  validates_presence_of :uid, :provider, :username, :email, :avatar_url
+
   def self.find_or_create_from_omniauth(auth)
     provider = auth.provider
     uid = auth.uid

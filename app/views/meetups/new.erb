@@ -1,0 +1,14 @@
+<h1>Create new meetup</h1>
+
+<form action="/meetups" method="post">
+  <label for="task_name">Name:</label>
+  <input type="text" id="name" value="<%= @form_data[:name] %>" name="name">
+
+  <label for="task_name">Location:</label>
+  <input type="text" id="location" value="<%= @form_data[:location] %>" name="location">
+
+  <label for="task_name">Description:</label>
+  <input type="text" id="description" value="<%= @form_data[:description] %>" name="description">
+
+  <input type="submit">
+</form>
